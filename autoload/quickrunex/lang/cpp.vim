@@ -17,7 +17,6 @@ let s:flags = [
 \ ['^boost/thread[./]', ['', '-lboost_thread']],
 \ ['^boost/timer[./]', ['', '-lboost_timer']],
 \ ['^boost/wave[./]', ['', '-lboost_wave']],
-\ ['^boost/wave[./]', ['', '-lboost_wave']],
 \]
 
 " fltk
