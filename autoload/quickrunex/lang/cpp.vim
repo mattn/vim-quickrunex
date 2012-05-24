@@ -22,8 +22,8 @@ let s:flags = [
 " fltk
 if has('win32') || has('win64')
   let s:flags += [
-  \ ['^fltk2[./]', ['', '-lfltk2 -lfltk2_images -lgdi32 -luser32 -luuid -lole32 -lcomdlg32 -lcomctl32  c:/mingw/lib/libuv.a -lws2_32 -liphlpapi -lpsapi']],
-  \ ['^fltk3[./]', ['', '-lfltk3 -lfltk3images -lgdi32 -luser32 -luuid -lole32 -lcomdlg32 -lcomctl32  c:/mingw/lib/libuv.a -lws2_32 -liphlpapi -lpsapi']],
+  \ ['^fltk2[./]', ['', '-lfltk2 -lfltk2_images -lgdi32 -luser32 -luuid -lole32 -lcomdlg32 -lcomctl32 -lws2_32 -liphlpapi -lpsapi']],
+  \ ['^fltk3[./]', ['', '-lfltk3 -lfltk3images -lgdi32 -luser32 -luuid -lole32 -lcomdlg32 -lcomctl32 -lws2_32 -liphlpapi -lpsapi']],
   \]
 else
   let s:flags += [
@@ -31,27 +31,6 @@ else
   \ ['^fltk3[./]', ['', '-lfltk3 -lfltk3images']],
   \]
 endif
-
-" libuv
-let s:flags += [
-\ ['^\(uv.h\|uv/uv.h\)$', ['', '-luv']],
-\]
-
-" libuv
-if has('win32') || has('win64')
-  let s:flags += [
-  \ ['^v8[./]', ['', '-lv8 -lws2_32 -lwinmm']],
-  \]
-else
-  let s:flags += [
-  \ ['^v8[./]', ['', '-lv8']],
-  \]
-endif
-
-" gtk
-let s:flags += [
-\ ['^gtk[./]', ['`pkg-config --cflags --libs gtk+-2.0`', '']],
-\]
 
 function! quickrunex#lang#cpp#get_hook()
   return quickrunex#lang#c#get_hook()
