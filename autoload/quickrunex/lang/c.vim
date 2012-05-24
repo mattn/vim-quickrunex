@@ -26,9 +26,6 @@ function! s:hook.on_hook_loaded(session, context)
   for lang in self['lang']
     let flags += quickrunex#lang#{lang}#get_flags()
   endfor
-  if has('win32') || has('win64')
-    call s:fixup_mingw_libs(flags)
-  endif
 
   let mx = '^\s*#\s*include\s\+[<"]\zs[^">]\+\ze[">]'
   let [n, l] = [1, line('$')]
@@ -45,7 +42,11 @@ function! s:hook.on_hook_loaded(session, context)
           endfor
           for v in range(len(exec))
             if stridx(exec[v], '%c') != -1 && stridx(exec[v], inf[1][1]) == -1
-              let exec[v] .= ' '.substitute(inf[1][1], '`\(.\+\)`', '\=system(submatch(1))', 'g')
+              let flags = ' '.substitute(inf[1][1], '`\(.\+\)`', '\=system(submatch(1))', 'g')
+              if has('win32') || has('win64')
+                let flags = s:fixup_mingw_libs(flags)
+              endif
+              let exec[v] .= ' '.flags
             endif
           endfor
         endif
@@ -58,25 +59,23 @@ endfunction
 function! s:fixup_mingw_libs(flags)
   let gccs = split(globpath(substitute($PATH, ';', ',', 'g'), 'gcc.exe'), "\n")
   if len(gccs) == 0
-    return
+    return a:flags
   endif
   let gcc = substitute(gccs[0], '\', '/', 'g')
   let libpath = substitute(gcc, '/bin/gcc\.exe$', '/lib', '')
-  for inf in a:flags
-    let libs = split(inf[1][1], '\s\+')
-    for n in range(len(libs))
-      if libs[n] =~ '^-l'
-        let l = split(globpath(libpath, 'lib'.libs[n][2:].'*.a'), "\n")
-        if len(l)
-          let l = map(l, 'substitute(v:val, ".*\\", "", "")')
-          let l = map(l, 'substitute(v:val, "^lib", "-l", "")')
-          let l = map(l, 'substitute(v:val, "\.a$", "", "")')
-          let libs[n] = sort(l)[0]
-        endif
+  let libs = split(a:flags, '\s\+')
+  for n in range(len(libs))
+    if libs[n] =~ '^-l'
+      let l = split(globpath(libpath, 'lib'.libs[n][2:].'*.a'), "\n")
+      if len(l)
+        let l = map(l, 'substitute(v:val, ".*\\", "", "")')
+        let l = map(l, 'substitute(v:val, "^lib", "-l", "")')
+        let l = map(l, 'substitute(v:val, "\.a$", "", "")')
+        let libs[n] = sort(l)[0]
       endif
-    endfor
-	let inf[1][1] = join(libs, ' ')
+    endif
   endfor
+  return join(libs, ' ')
 endfunction
 
 let s:fixup_mingw = 0
