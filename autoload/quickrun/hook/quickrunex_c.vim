@@ -22,10 +22,15 @@ let s:flags += [
 let s:hook = {}
 
 function! s:hook.on_module_loaded(session, context)
+
   let flags = []
   for lang in self['lang']
-    let flags += quickrun#hook#quickrunex_{lang}#get_flags()
+    try
+      let flags += quickrun#hook#quickrunex_{lang}#get_flags()
+    catch
+    endtry
   endfor
+  if len(flags) == 0 | return | endif
 
   let mx = '^\s*#\s*include\s\+[<"]\zs[^">]\+\ze[">]'
   let [n, l] = [1, line('$')]
