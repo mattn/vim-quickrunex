@@ -64,6 +64,13 @@ function! s:hook.on_hook_loaded(session, context)
   endwhile
 endfunction
 
+function! s:shellwords(str)
+  let words = split(a:str, '\%(\([^ \t\''"]\+\)\|''\([^\'']*\)''\|"\(\%([^\"\\]\|\\.\)*\)"\)\zs\s*\ze')
+  let words = map(words, 'substitute(v:val, ''\\\([\\ ]\)'', ''\1'', "g")')
+  let words = map(words, 'matchstr(v:val, ''^\%\("\zs\(.*\)\ze"\|''''\zs\(.*\)\ze''''\|.*\)$'')')
+  return words
+endfunction
+
 function! s:fixup_backquote(is_msvc, cmd)
   if !a:is_msvc | return a:cmd | endif
   let cmd = a:cmd
@@ -71,17 +78,21 @@ function! s:fixup_backquote(is_msvc, cmd)
   return cmd
 endfunction
 
+function! s:which(cmd)
+  let ret = globpath(substitute(substitute($PATH, ';', ',', 'g'), '\', '/', 'g'), a:cmd)
+  return len(ret) == 0 ? '' : substitute(split(ret, "\n")[0], '\', '/', 'g')
+endfunction
+
 function! s:fixup_libs(is_msvc, flags)
   let flags = a:flags
   if a:is_msvc
     let flags = substitute(flags, '-mms-bitfields', '', 'g')
-    let cls = split(globpath(substitute($PATH, ';', ',', 'g'), 'cl.exe'), "\n")
-    if len(cls) == 0
+    let cl = s:which('cl.exe')
+    if len(cl) == 0
       return flags
     endif
-    let cl = substitute(cls[0], '\', '/', 'g')
     let libpath = substitute(cl, '/bin/cl\.exe$', '/lib', '')
-    let libs = split(flags, '\s\+')
+    let libs = s:shellwords(flags)
     for n in range(len(libs))
       if libs[n] =~ '^-l'
         let l = split(globpath(libpath, libs[n][2:].'*.lib'), "\n")
@@ -93,13 +104,12 @@ function! s:fixup_libs(is_msvc, flags)
     endfor
     return join(libs, ' ')
   else
-    let gccs = split(globpath(substitute($PATH, ';', ',', 'g'), 'gcc.exe'), "\n")
-    if len(gccs) == 0
+    let gcc = s:which('gcc.exe')
+    if len(gcc) == 0
       return flags
     endif
-    let gcc = substitute(gccs[0], '\', '/', 'g')
     let libpath = substitute(gcc, '/bin/gcc\.exe$', '/lib', '')
-    let libs = split(flags, '\s\+')
+    let libs = s:shellwords(flags)
     for n in range(len(libs))
       if libs[n] =~ '^-l'
         let l = split(globpath(libpath, 'lib'.libs[n][2:].'*.a'), "\n")
