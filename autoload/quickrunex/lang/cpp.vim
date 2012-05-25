@@ -32,16 +32,10 @@ else
   \]
 endif
 
-function! quickrunex#lang#cpp#get_hook()
-  return quickrunex#lang#c#get_hook()
+function! quickrunex#lang#cpp#apply(session, context)
+  call quickrunex#lang#c#apply(a:session, a:context)
 endfunction
 
 function! quickrunex#lang#cpp#get_flags()
-  return s:flags
-endfunction
-
-function! quickrunex#lang#cpp#install()
-  let hook = quickrunex#lang#cpp#get_hook()
-  let hook['lang'] = ['c', 'cpp']
-  call quickrun#register_hook('quickrunex', hook)
+  return quickrunex#lang#c#get_flags() + s:flags
 endfunction
