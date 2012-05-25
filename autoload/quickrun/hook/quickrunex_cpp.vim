@@ -32,16 +32,12 @@ else
   \]
 endif
 
-function! quickrunex#lang#cpp#get_hook()
-  return quickrunex#lang#c#get_hook()
-endfunction
-
-function! quickrunex#lang#cpp#get_flags()
+function! quickrun#hook#quickrunex_cpp#get_flags()
   return s:flags
 endfunction
 
-function! quickrunex#lang#cpp#install()
-  let hook = quickrunex#lang#cpp#get_hook()
+function! quickrun#hook#quickrunex_cpp#new()
+  let hook = quickrun#hook#quickrunex_c#new()
   let hook['lang'] = ['c', 'cpp']
-  call quickrun#register_hook('quickrunex', hook)
+  return hook
 endfunction

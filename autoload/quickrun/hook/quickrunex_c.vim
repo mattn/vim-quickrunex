@@ -21,10 +21,10 @@ let s:flags += [
 
 let s:hook = {}
 
-function! s:hook.on_hook_loaded(session, context)
+function! s:hook.on_module_loaded(session, context)
   let flags = []
   for lang in self['lang']
-    let flags += quickrunex#lang#{lang}#get_flags()
+    let flags += quickrun#hook#quickrunex_{lang}#get_flags()
   endfor
 
   let mx = '^\s*#\s*include\s\+[<"]\zs[^">]\+\ze[">]'
@@ -125,17 +125,12 @@ function! s:fixup_libs(is_msvc, flags)
   endif
 endfunction
 
-let s:fixup_mingw = 0
-function! quickrunex#lang#c#get_hook()
-  return s:hook
-endfunction
-
-function! quickrunex#lang#c#get_flags()
+function! quickrun#hook#quickrunex_c#get_flags()
   return s:flags
 endfunction
 
-function! quickrunex#lang#c#install()
-  let hook = quickrunex#lang#c#get_hook()
+function! quickrun#hook#quickrunex_c#new()
+  let hook = deepcopy(s:hook)
   let hook['lang'] = ['c']
-  call quickrun#register_hook('quickrunex', hook)
+  return hook
 endfunction
