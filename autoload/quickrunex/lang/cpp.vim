@@ -19,6 +19,11 @@ let s:flags = [
 \ ['^boost/wave[./]', ['', '-lboost_wave']],
 \]
 
+" thread
+let s:flags += [
+\ ['^thread$', ['', '-lpthread']],
+\]
+
 " fltk
 if has('win32') || has('win64')
   let s:flags += [
