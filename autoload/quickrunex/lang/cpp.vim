@@ -17,8 +17,14 @@ let s:flags = [
 \ ['^boost/thread[./]', ['', '-lboost_thread']],
 \ ['^boost/timer[./]', ['', '-lboost_timer']],
 \ ['^boost/wave[./]', ['', '-lboost_wave']],
+\]
+
+" boost/asio
+if has('win32') || has('win64')
+let s:flags += [
 \ ['^boost/asio[./]', ['', '-lboost_system -lmswsock -lws2_32']],
 \]
+endif
 
 " thread
 let s:flags += [
