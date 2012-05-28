@@ -17,7 +17,7 @@ let s:flags = [
 \ ['^boost/thread[./]', ['', '-lboost_thread']],
 \ ['^boost/timer[./]', ['', '-lboost_timer']],
 \ ['^boost/wave[./]', ['', '-lboost_wave']],
-\ ['^boost/asio[./]', ['', '-lboost_system -lws2_32 -lmswsock']],
+\ ['^boost/asio[./]', ['', '-lboost_system -lmswsock -lws2_32']],
 \]
 
 " thread
