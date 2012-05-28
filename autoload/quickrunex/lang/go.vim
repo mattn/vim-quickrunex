@@ -26,7 +26,13 @@ function! quickrunex#lang#go#apply(session, context)
     endif
     let n += 1
   endwhile
+  if !exists('b:quickrunex')
+    let b:quickrunex = {"pkgs": {}}
+  endif
   for pkg in pkgs
-    call system(printf("go get %s", pkg))
+    if !has_key(config['pkgs'], pkg)
+      call system(printf("go get %s", pkg))
+      let b:quickrunex['pkgs'][pkg] = 1
+    endif
   endfor
 endfunction
