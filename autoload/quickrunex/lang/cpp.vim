@@ -14,7 +14,7 @@ let s:flags = [
 \ ['^boost/serialization[./]', ['', '-lboost_serialization']],
 \ ['^boost/signals[./]', ['', '-lboost_signals']],
 \ ['^boost/system[./]', ['', '-lboost_system']],
-\ ['^boost/thread[./]', ['', '-lboost_thread']],
+\ ['^boost/thread[./]', ['', '-lboost_thread -lboost_system']],
 \ ['^boost/timer[./]', ['', '-lboost_timer']],
 \ ['^boost/wave[./]', ['', '-lboost_wave']],
 \]
