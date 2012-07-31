@@ -34,7 +34,7 @@ function! quickrunex#lang#c#apply(session, context)
         if file =~ inf[0]
           for v in range(len(exec))
             if stridx(exec[v], '%c') != -1 && stridx(exec[v], inf[1][0]) == -1
-              let f = ' '.substitute(inf[1][0], '`\([^`]\+\)`', '\=system(s:fixup_backquote(is_msvc, submatch(1)))', 'g')
+              let f = substitute(inf[1][0], '`\([^`]\+\)`', '\=system(s:fixup_backquote(is_msvc, submatch(1)))', 'g')
               if has('win32') || has('win64')
                 let f = s:fixup_libs(is_msvc, f)
               endif
@@ -46,7 +46,7 @@ function! quickrunex#lang#c#apply(session, context)
               if is_msvc
                 let exec[v] .= ' /link'
               endif
-              let f = ' '.substitute(inf[1][1], '`\([^`]\+\)`', '\=system(s:fixup_backquote(is_msvc, submatch(1)))', 'g')
+              let f = substitute(inf[1][1], '`\([^`]\+\)`', '\=system(s:fixup_backquote(is_msvc, submatch(1)))', 'g')
               if has('win32') || has('win64')
                 let f = s:fixup_libs(is_msvc, f)
               endif
@@ -80,7 +80,7 @@ function! s:which(cmd)
 endfunction
 
 function! s:fixup_libs(is_msvc, flags)
-  let flags = a:flags
+  let flags = substitute(a:flags, '^\s*\|\s*$', '', 'g')
   if a:is_msvc
     let flags = substitute(flags, '-mms-bitfields', '', 'g')
     let cl = s:which('cl.exe')
