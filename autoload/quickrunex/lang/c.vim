@@ -1,7 +1,13 @@
 " libuv
-let s:flags = [
-\ ['^\(uv.h\|uv/uv.h\)$', ['', '-luv']],
-\]
+if has('win32') || has('win64')
+  let s:flags = [
+  \ ['^\(uv.h\|uv/uv.h\)$', ['', '-luv -lws2_32 -liphlpapi -lpsapi -lm']],
+  \]
+else
+  let s:flags = [
+  \ ['^\(uv.h\|uv/uv.h\)$', ['', '-luv -lrt -lm']],
+  \]
+endif
 
 " v8
 if has('win32') || has('win64')
