@@ -22,9 +22,9 @@ function! quickrunex#lang#c#apply(session, context)
   let [n, l] = [1, line('$')]
   let exec = a:session['config']['exec']
   if type(exec) != 3
-    let tmp = [exec]
-    let exec = tmp
-    unlet tmp
+    let tmp = exec
+    unlet exec
+    let exec = [tmp]
     let a:session['config']['exec'] = exec
   end
   let is_msvc = a:session['config']['command'] == 'cl'
