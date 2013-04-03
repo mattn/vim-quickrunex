@@ -45,6 +45,11 @@ else
   \]
 endif
 
+let s:flags += [
+\ ['^QtCore/', [len($QT_ROOT) > 0 ? '-I'.substitute($QT_ROOT, '\\', '/', 'g').'/include' : '', (len($QT_ROOT) > 0 ? '-L'.substitute($QT_ROOT, '\\', '/', 'g').'/lib' : '').' -lQtCore4']],
+\ ['^QtGui/', ['', '-lQtGui4']],
+\]
+
 function! quickrunex#lang#cpp#apply(session, context)
   call quickrunex#lang#c#apply(a:session, a:context)
 endfunction
