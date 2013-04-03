@@ -88,15 +88,19 @@ function! s:fixup_libs(is_msvc, flags)
     if len(cl) == 0
       return flags
     endif
-    let libpath = substitute(cl, '/bin/cl\.exe$', '/lib', '')
+    let libpaths = get(g:, 'quickrunex_clibpaths', [])
+    let libpaths += [substitute(cl, '/bin/cl\.exe$', '/lib', '')]
     let libs = s:shellwords(flags)
     for n in range(len(libs))
       if libs[n] =~ '^-l'
-        let l = split(globpath(libpath, libs[n][2:].'*.lib'), "\n")
-        if len(l)
-          let l = map(l, 'fnamemodify(v:val, ":t")')
-          let libs[n] = sort(l)[0]
-        endif
+        for libpath in libpaths
+          let l = split(globpath(libpath, libs[n][2:].'*.lib'), "\n")
+          if len(l)
+            let l = map(l, 'fnamemodify(v:val, ":t")')
+            let libs[n] = sort(l)[0]
+            break
+          endif
+        endfor 
       endif
     endfor
     return join(libs, ' ')
@@ -105,16 +109,20 @@ function! s:fixup_libs(is_msvc, flags)
     if len(gcc) == 0
       return flags
     endif
-    let libpath = substitute(gcc, '/bin/gcc\.exe$', '/lib', '')
+    let libpaths = get(g:, 'quickrunex_clibpaths', [])
+    let libpaths += [substitute(gcc, '/bin/gcc\.exe$', '/lib', '')]
     let libs = s:shellwords(flags)
     for n in range(len(libs))
       if libs[n] =~ '^-l'
-        let l = split(globpath(libpath, 'lib'.libs[n][2:].'*.a'), "\n")
-        if len(l)
-          let l = map(l, 'fnamemodify(v:val, ":t")')
-          let l = map(l, 'substitute(v:val, "^lib", "-l", "")')
-          let l = map(l, 'substitute(v:val, "\.a$", "", "")')
-          let libs[n] = sort(l)[0]
+        for libpath in libpaths
+          let l = split(globpath(libpath, 'lib'.libs[n][2:].'*.a'), "\n")
+          if len(l)
+            let l = map(l, 'fnamemodify(v:val, ":t")')
+            let l = map(l, 'substitute(v:val, "^lib", "-l", "")')
+            let l = map(l, 'substitute(v:val, "\.a$", "", "")')
+            let libs[n] = sort(l)[0]
+            break
+          endif
         endif
       endif
     endfor
