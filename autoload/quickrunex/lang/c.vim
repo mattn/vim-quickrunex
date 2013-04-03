@@ -123,7 +123,7 @@ function! s:fixup_libs(is_msvc, flags)
             let libs[n] = sort(l)[0]
             break
           endif
-        endif
+        endfor
       endif
     endfor
     return join(libs, ' ')
