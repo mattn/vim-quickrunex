@@ -32,6 +32,11 @@ function! quickrunex#lang#c#apply(session, context)
   let mx = '^\s*#\s*include\s\+[<"]\zs[^">]\+\ze[">]'
   let [n, l] = [1, line('$')]
   let exec = a:session['config']['exec']
+  if type(exec) != 3
+    let tmp = [exec]
+    let exec = tmp
+    unlet tmp
+  end
   let is_msvc = a:session['config']['command'] == 'cl'
   while n < l
     let file = matchstr(getline(n), mx)
