@@ -9,17 +9,6 @@ else
   \]
 endif
 
-" v8
-if has('win32') || has('win64')
-  let s:flags += [
-  \ ['^v8[./]', ['', '-lv8 -lws2_32 -lwinmm']],
-  \]
-else
-  let s:flags += [
-  \ ['^v8[./]', ['', '-lv8']],
-  \]
-endif
-
 " gtk
 let s:flags += [
 \ ['^gtk[./]', ['`pkg-config --cflags gtk+-2.0`', '`pkg-config --libs gtk+-2.0`']],

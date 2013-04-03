@@ -27,6 +27,17 @@ let s:flags += [
 \]
 endif
 
+" v8
+if has('win32') || has('win64')
+  let s:flags += [
+  \ ['^v8[./]', ['', '-lv8 -lws2_32 -lwinmm']],
+  \]
+else
+  let s:flags += [
+  \ ['^v8[./]', ['', '-lv8']],
+  \]
+endif
+
 " thread
 let s:flags += [
 \ ['^thread$', ['', '-lpthread']],
@@ -45,6 +56,7 @@ else
   \]
 endif
 
+" qt
 let s:flags += [
 \ ['^QtCore/', [len($QT_ROOT) > 0 ? '-I'.substitute($QT_ROOT, '\\', '/', 'g').'/include' : '', (len($QT_ROOT) > 0 ? '-L'.substitute($QT_ROOT, '\\', '/', 'g').'/lib' : '').' -lQtCore4']],
 \ ['^QtGui/', ['', '-lQtGui4']],
