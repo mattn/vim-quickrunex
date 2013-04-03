@@ -36,6 +36,7 @@ function! quickrunex#lang#c#apply(session, context)
     let tmp = [exec]
     let exec = tmp
     unlet tmp
+    let a:session['config']['exec'] = exec
   end
   let is_msvc = a:session['config']['command'] == 'cl'
   while n < l
