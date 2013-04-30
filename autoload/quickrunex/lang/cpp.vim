@@ -57,9 +57,13 @@ else
 endif
 
 " qt
+let s:qtroot = len($QT_ROOT) > 0 ? $QT_ROOT : $QTDIR
+let s:qtinc = len(s:qtroot) > 0 ? '-I'.substitute(s:qtroot, '\\', '/', 'g').'/include' : ''
+let s:qtlib = len(s:qtroot) > 0 ? '-L'.substitute(s:qtroot, '\\', '/', 'g').'/lib' : ''
 let s:flags += [
-\ ['^QtCore/', [len($QT_ROOT) > 0 ? '-I'.substitute($QT_ROOT, '\\', '/', 'g').'/include' : '', (len($QT_ROOT) > 0 ? '-L'.substitute($QT_ROOT, '\\', '/', 'g').'/lib' : '').' -lQtCore4']],
-\ ['^QtGui/', ['', '-lQtGui4']],
+\ ['^QtCore/', [s:qtinc, s:qtlib.' -lQtCore4']],
+\ ['^QtGui/', [s:qtinc, s:qtlib.' -lQtGui4']],
+\ ['^QtNetwork/', [s:qtinc, s:qtlib.' -lQtNetwork4']],
 \]
 
 function! quickrunex#lang#cpp#apply(session, context)
