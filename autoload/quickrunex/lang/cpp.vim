@@ -58,13 +58,24 @@ endif
 
 " qt
 let s:qtroot = len($QT_ROOT) > 0 ? $QT_ROOT : $QTDIR
-let s:qtinc = len(s:qtroot) > 0 ? '-I'.substitute(s:qtroot, '\\', '/', 'g').'/include' : ''
-let s:qtlib = len(s:qtroot) > 0 ? '-L'.substitute(s:qtroot, '\\', '/', 'g').'/lib' : ''
-let s:flags += [
-\ ['^QtCore/', [s:qtinc, s:qtlib.' -lQtCore4']],
-\ ['^QtGui/', [s:qtinc, s:qtlib.' -lQtGui4']],
-\ ['^QtNetwork/', [s:qtinc, s:qtlib.' -lQtNetwork4']],
-\]
+if stridx(tolower(s:qtroot), 'qt4') != -1
+  let s:qtinc = '-I'.substitute(s:qtroot, '\\', '/', 'g').'/include'
+  let s:qtlib = '-L'.substitute(s:qtroot, '\\', '/', 'g').'/lib'
+  let s:flags += [
+  \ ['^QtCore/', [s:qtinc, s:qtlib.' -lQtCore4']],
+  \ ['^QtGui/', [s:qtinc, s:qtlib.' -lQtGui4']],
+  \ ['^QtNetwork/', [s:qtinc, s:qtlib.' -lQtNetwork4']],
+  \]
+elseif stridx(tolower(s:qtroot), 'qt5') != -1
+  let s:qtinc = '-I'.substitute(s:qtroot, '\\', '/', 'g').'/include'
+  let s:qtlib = '-L'.substitute(s:qtroot, '\\', '/', 'g').'/lib'
+  let s:flags += [
+  \ ['^QtCore/', [s:qtinc, s:qtlib.' -lQt5Core']],
+  \ ['^QtGui/', [s:qtinc, s:qtlib.' -lQt5Gui -lQt5Core']],
+  \ ['^QtNetwork/', [s:qtinc, s:qtlib.' -lQt5Network -lQt5Core']],
+  \ ['^QtWidgets/', [s:qtinc, s:qtlib.' -lQt5Widgets -lQt5Core']],
+  \]
+endif
 
 function! quickrunex#lang#cpp#apply(session, context)
   call quickrunex#lang#c#apply(a:session, a:context)
