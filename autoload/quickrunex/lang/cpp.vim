@@ -70,10 +70,10 @@ elseif stridx(tolower(s:qtroot), 'qt5') != -1
   let s:qtinc = '-I'.substitute(s:qtroot, '\\', '/', 'g').'/include'
   let s:qtlib = '-L'.substitute(s:qtroot, '\\', '/', 'g').'/lib'
   let s:flags += [
-  \ ['^QtCore/', [s:qtinc, s:qtlib.' -lQt5Core']],
-  \ ['^QtGui/', [s:qtinc, s:qtlib.' -lQt5Gui -lQt5Core']],
-  \ ['^QtNetwork/', [s:qtinc, s:qtlib.' -lQt5Network -lQt5Core']],
-  \ ['^QtWidgets/', [s:qtinc, s:qtlib.' -lQt5Widgets -lQt5Core']],
+  \ ['^QtCore/', [s:qtinc, s:qtlib.' -static-libgcc -static-libstdc++ -lQt5Core']],
+  \ ['^QtGui/', [s:qtinc, s:qtlib.' -static-libgcc -static-libstdc++ -lQt5Gui -lQt5Core']],
+  \ ['^QtNetwork/', [s:qtinc, s:qtlib.' -static-libgcc -static-libstdc++ -lQt5Network -lQt5Core']],
+  \ ['^QtWidgets/', [s:qtinc, s:qtlib.' -static-libgcc -static-libstdc++ -lQt5Widgets -lQt5Core']],
   \]
 endif
 
@@ -82,5 +82,5 @@ function! quickrunex#lang#cpp#apply(session, context)
 endfunction
 
 function! quickrunex#lang#cpp#get_flags()
-  return quickrunex#lang#c#get_flags() + s:flags
+  return quickrunex#merge_flags(quickrunex#lang#c#get_flags() + s:flags, "cpp")
 endfunction

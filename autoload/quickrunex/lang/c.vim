@@ -131,5 +131,5 @@ function! s:fixup_libs(is_msvc, flags)
 endfunction
 
 function! quickrunex#lang#c#get_flags()
-  return s:flags
+  return quickrunex#merge_flags(s:flags, "c")
 endfunction
