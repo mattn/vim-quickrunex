@@ -8,7 +8,6 @@ function! quickrunex#merge_flags(flags, lang)
     elseif type(user_flags) == 2
       call extend(flags, call(user_flags, flags))
     endif
-  echomsg string(flags)
   endif
   return flags
 endfunction
