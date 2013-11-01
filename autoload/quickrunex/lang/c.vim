@@ -1,10 +1,12 @@
+let s:flags = []
+
 " libuv
 if has('win32') || has('win64')
-  let s:flags = [
+  let s:flags += [
   \ ['^\(uv.h\|uv/uv.h\)$', ['', '-luv -lws2_32 -liphlpapi -lpsapi -lm']],
   \]
 else
-  let s:flags = [
+  let s:flags += [
   \ ['^\(uv.h\|uv/uv.h\)$', ['', '-luv -lrt -lm']],
   \]
 endif
@@ -12,6 +14,11 @@ endif
 " gtk
 let s:flags += [
 \ ['^gtk[./]', ['`pkg-config --cflags gtk+-2.0`', '`pkg-config --libs gtk+-2.0`']],
+\]
+
+" jansson
+let s:flags += [
+\ ['^\(jansson.h\)$', ['', '-ljansson']],
 \]
 
 let s:hook = {}
