@@ -21,6 +21,11 @@ let s:flags += [
 \ ['^\(jansson.h\)$', ['', '-ljansson']],
 \]
 
+" wininet
+let s:flags += [
+\ ['^\(wininet.h\)$', ['', '-lwininet']],
+\]
+
 let s:hook = {}
 
 function! quickrunex#lang#c#apply(session, context)
