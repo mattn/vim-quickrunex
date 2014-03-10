@@ -24,6 +24,12 @@ let s:flags += [
 " wininet
 let s:flags += [
 \ ['^\(wininet.h\)$', ['', '-lwininet']],
+\ ['^\(ws2tcpip.h\)$', ['', '-lws2_32']],
+\]
+
+" mruby
+let s:flags += [
+\ ['^\(mruby.h\)$', ['-Iinclude', 'build/host/lib/libmruby.a']],
 \]
 
 let s:hook = {}
