@@ -1,6 +1,7 @@
 " boost
 let s:flags = [
 \ ['^boost/chrono[./]', ['', '-lboost_chrono -lboost_system']],
+\ ['^boost/context[./]', ['', '-lboost_context -lboost_system']],
 \ ['^boost/coroutine[./]', ['-lboost_context', '-lboost_system']],
 \ ['^boost/date_time[./]', ['', '-lboost_date_time']],
 \ ['^boost/exception[./]', ['', '-lboost_exception']],

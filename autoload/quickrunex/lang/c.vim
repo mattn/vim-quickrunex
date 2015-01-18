@@ -3,13 +3,18 @@ let s:flags = []
 " libuv
 if has('win32') || has('win64')
   let s:flags += [
-  \ ['^\(uv.h\|uv/uv.h\)$', ['', '-luv -lws2_32 -liphlpapi -lpsapi -lm']],
+  \ ['^\(uv\.h\|uv/uv\.h\)$', ['', '-luv -lws2_32 -liphlpapi -lpsapi -lm']],
   \]
 else
   let s:flags += [
-  \ ['^\(uv.h\|uv/uv.h\)$', ['', '-luv -lrt -lm']],
+  \ ['^\(uv\.h\|uv/uv\.h\)$', ['', '-luv -lrt -lm']],
   \]
 endif
+
+" gc
+let s:flags += [
+\ ['^gc\.h$', ['', '-lgc']],
+\]
 
 " gtk
 let s:flags += [
