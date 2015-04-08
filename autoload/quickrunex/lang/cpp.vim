@@ -44,6 +44,11 @@ let s:flags += [
 \ ['^thread$', ['', '-lpthread']],
 \]
 
+" thread
+let s:flags += [
+\ ['^ujson\.hpp$', ['', '-lujson']],
+\]
+
 " fltk
 if has('win32') || has('win64')
   let s:flags += [
